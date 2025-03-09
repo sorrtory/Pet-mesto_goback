@@ -1,0 +1,29 @@
+services:
+  # Backend Service
+  backend:
+    container_name: mesto-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    ports:
+      - "80:8080"
+    depends_on:
+      - db
+    restart: on-failure
+
+  # Database Service
+  db:
+    container_name: mesto-db
+    image: postgres:alpine
+    restart: always
+    volumes:
+      - mesto-db-data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    ## Close in prod
+    ports:
+      - 5432:5432
+
+volumes:
+  mesto-db-data:
