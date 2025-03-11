@@ -22,7 +22,7 @@ func GetMe(store *db.Store, u UserMe) (*User, error){
 // TODO: implement
 func GetUser(store *db.Store, u UserAuth) (*User, error){
     query := `\
-    SELECT * FROM SECRETS WHERE token = ?;
+    SELECT * FROM users5;
     `
     r, err := store.Query(query, u.Authorization)
     if err != nil {

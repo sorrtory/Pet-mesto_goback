@@ -9,7 +9,7 @@ import (
 )
 
 type Store struct {
-    db *sql.DB
+    DB *sql.DB
 }
 
 func NewConnection(user string, password string) (*Store, error){
@@ -35,9 +35,9 @@ func NewConnection(user string, password string) (*Store, error){
 
 
 func (s Store) Query(query string, args ...any) (*sql.Rows, error){
-    r, err := s.db.Query(query, args...)
+    r, err := s.DB.Query(query, args...)
     if err != nil {
-        log.Println("Can't query: ", query)
+        log.Printf("Can't query: %v\n", query)
         return nil, err
     }
     return r, nil

@@ -18,17 +18,23 @@ func NewHandler(store *db.Store) *Handler {
 func (h Handler) Authorized(c *gin.Context) (*User, error) {
 	auth := UserAuth{}
 	if err := c.ShouldBindHeader(&auth); err != nil {
+        // Hasn't Authorization header
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return nil, err
 	}
+    
 	u, err := GetUser(h.store, auth)
+	if err != nil {
+		return nil, err
+	}
 	return u, err
 
 }
 
 func (h Handler) Me(c *gin.Context) {
-	u, err := h.Authorized(c)
+	u, err := h.Authorized(c) // Get user
 	if err != nil {
+		// User not found
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	} else {
 		c.JSON(http.StatusOK, *u)
