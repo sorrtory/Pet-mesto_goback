@@ -1,16 +1,26 @@
+# Load .env variables
+ifneq (,$(wildcard ./.env))
+    include .env
+    export $(shell sed 's/=.*//' .env)
+endif
+
 APP_NAME = mesto
 
 all: run
 
 build:
-	go build -o dist/$(APP_NAME) src/cmd/main.go
+	go build -o bin/$(APP_NAME) cmd/main.go
 
 run: build
-	./dist/$(APP_NAME)
-
+	./bin/$(APP_NAME)
 
 prod:
-	docker compose --file compose.yaml --project-name 'mesto-goback' -d up --build
+	docker compose --file deployment/compose.yaml --project-name 'mesto-goback' up -d --build
 
-stop:
-	docker compose --file compose.yaml --project-name 'mesto-goback' down
+down:
+	docker compose --file deployment/compose.yaml down
+
+up-db:
+	docker compose --file deployment/compose.yaml up -d --build 'db'
+
+
