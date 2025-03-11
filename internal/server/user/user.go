@@ -1,14 +1,10 @@
 package user
 
-import (
-	"mesto-goback/internal/common"
-)
-
 type User struct {
-	Name   string           `json:"name"`
-	About  string           `json:"about"`
-	Avatar common.ImageLink `json:"avatar"`
-	ID     UserId           `json:"_id"`
+	ID     int    `json:"_id"`
+	Name   string `json:"name"`
+	About  string `json:"about"`
+	Avatar string `json:"avatar"`
 }
 
 type UserMe struct {
@@ -21,3 +17,14 @@ type UserAuth struct {
 }
 
 type UserId string
+
+// func UserFromString(id string, name string, about string, avatar string) (*User, err) {
+// 	if name != "" {
+// 		if common.IsImage(avatar) {
+// 			return &User{}
+// 		} else {
+// 			log.Println(avatar, "is not image!")
+// 		}
+// 	}
+
+// }

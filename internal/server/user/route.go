@@ -19,25 +19,22 @@ func (h Handler) Authorized(c *gin.Context) (*User, error) {
 	auth := UserAuth{}
 	if err := c.ShouldBindHeader(&auth); err != nil {
         // Hasn't Authorization header
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return nil, err
+	}
+
+	u, err := GetUser(h.store, auth)
+	if err != nil {
+        // Authorization isn't found in DB
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return nil, err
 	}
-    
-	u, err := GetUser(h.store, auth)
-	if err != nil {
-		return nil, err
-	}
-	return u, err
-
+	return u, nil
 }
 
 func (h Handler) Me(c *gin.Context) {
 	u, err := h.Authorized(c) // Get user
-	if err != nil {
-		// User not found
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	} else {
+	if err == nil {
 		c.JSON(http.StatusOK, *u)
 	}
-
 }
