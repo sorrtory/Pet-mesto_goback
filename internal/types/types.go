@@ -17,3 +17,6 @@ func NewImageLink(link string) (ImageLink, error) {
 	}
 	return ImageLink{link, false}, fmt.Errorf("not valid")
 }
+
+
+

@@ -37,7 +37,7 @@ migrate-up:
 migrate-down:
 	go run cmd/migrate/migrate.go down
 
-# Use any migrate command with "make migrate <cmds...>"
+# Use any migratinon command with "make migrate <cmds...>"
 migrate:
 	~/go/bin/migrate -source file://cmd/migrate/migrations -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@localhost:5432/postgres?sslmode=disable" $(filter-out $@,$(MAKECMDGOALS))
 

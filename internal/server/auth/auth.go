@@ -10,7 +10,7 @@ import (
 
 // Check for Authorization header == User password
 //
-// Send a response if !=
+// Response an error if wrong password
 func Authorized(store *db.Store, c *gin.Context) (*mestoTypes.User, error) {
 	auth := mestoTypes.UserAuth{}
 	if err := c.ShouldBindHeader(&auth); err != nil {

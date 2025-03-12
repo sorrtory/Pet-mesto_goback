@@ -34,7 +34,8 @@ func (a API) Serve() {
 	{
 		cardsHandler := card.NewHTTPHandler(a.store)
 		cardsRoute.GET("/", cardsHandler.GetCards)
-		cardsRoute.POST("/", cardsHandler.PostCards)
+		cardsRoute.POST("/", cardsHandler.PostCard)
+		cardsRoute.DELETE("/:id", cardsHandler.DeleteCard)
 	}
 
 	router.Run(a.address + ":" + a.port)

@@ -27,14 +27,21 @@ func CardGetALL(store *Store) []mestoTypes.Card {
 	return cards
 }
 
-// Insert card into database. Return inserted ID
+// Delete card by its ID
+func CardDeleteByID(store *Store, card_id int) error {
+	query := `DELETE FROM cards WHERE id=$1`
+    _, err := store.DB.Exec(query, card_id)
+    return err
+}
+
+// Insert card data into database. Return assigned ID
 func CardPost(store *Store, card *mestoTypes.Card) (*mestoTypes.Card, error) {
 	query := `INSERT INTO cards (owner_id, name, link) VALUES ($1, $2, $3) RETURNING id, owner_id, name, link, createdAt`
 	return CardGet(store, query, card.Owner_id, card.Name, card.Link)
 }
 
-// Get one card from DB
-func CardGetByID(store *Store, id int64) (*mestoTypes.Card, error) {
+// Get one card from DB by its ID
+func CardGetByID(store *Store, id int) (*mestoTypes.Card, error) {
 	query := `SELECT * FROM cards WHERE id=$1`
 	return CardGet(store, query, id)
 }
