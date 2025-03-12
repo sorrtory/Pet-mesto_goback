@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS cards (
     id SERIAL PRIMARY KEY,
     owner_id INTEGER,
     name VARCHAR(30) NOT NULL,
-    link VARCHAR(100),
+    link TEXT,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (owner_id) REFERENCES users (id)
 );

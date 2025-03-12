@@ -2,6 +2,7 @@ package api
 
 import (
 	"mesto-goback/internal/db"
+	"mesto-goback/internal/server/card"
 	"mesto-goback/internal/server/user"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +11,7 @@ import (
 type API struct {
 	address string
 	port    string
-    store   *db.Store
+	store   *db.Store
 }
 
 func NewAPI(address string, port string, store *db.Store) *API {
@@ -21,11 +22,19 @@ func NewAPI(address string, port string, store *db.Store) *API {
 func (a API) Serve() {
 	router := gin.Default()
 
-	userRoute := router.Group("/users")
+	usersMeRoute := router.Group("/users/me")
 	{
-		userHandler := user.NewHandler(a.store)
-		userRoute.GET("/me", userHandler.Me)
+		userHandler := user.NewHTTPHandler(a.store)
+		usersMeRoute.GET("/", userHandler.GetMe)
+		usersMeRoute.PATCH("/", userHandler.PatchMe)
+		usersMeRoute.PATCH("/avatar", userHandler.PatchMeAvatar)
 
+	}
+	cardsRoute := router.Group("/cards")
+	{
+		cardsHandler := card.NewHTTPHandler(a.store)
+		cardsRoute.GET("/", cardsHandler.GetCards)
+		cardsRoute.POST("/", cardsHandler.PostCards)
 	}
 
 	router.Run(a.address + ":" + a.port)

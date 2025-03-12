@@ -17,7 +17,7 @@ run: build
 prod:
 	docker compose --file deployment/compose.yaml --project-name 'mesto-goback' up -d --build
 
-down:
+shutdown:
 	docker compose --file deployment/compose.yaml down
 
 up-db:
@@ -30,12 +30,12 @@ migrate-install:
 migrate-create:
 	~/go/bin/migrate create -seq -ext sql -dir cmd/migrate/migrations $(filter-out $@,$(MAKECMDGOALS))
 
-# cmd/migrate/main.go does the same as "migrate up/down"
+# cmd/migrate/migrate.go does the same as "migrate up/down"
 migrate-up:
-	go run cmd/migrate/main.go up
+	go run cmd/migrate/migrate.go up
 
 migrate-down:
-	go run cmd/migrate/main.go down
+	go run cmd/migrate/migrate.go down
 
 # Use any migrate command with "make migrate <cmds...>"
 migrate:

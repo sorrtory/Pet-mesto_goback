@@ -18,7 +18,7 @@ services:
   db:
     container_name: mesto-db
     image: postgres:alpine
-    # restart: always
+    restart: always
     volumes:
       - mesto-db-data:/var/lib/postgresql/data
     env_file:
