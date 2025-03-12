@@ -28,11 +28,28 @@ func LikesGetByCardID(store *Store, card_id int) []mestoTypes.Like {
 	return likes
 }
 
-// // Get one card by SQL query
-// func CardGet(store *Store, query string, args ...any) (*mestoTypes.Card, error) {
-// 	row := store.DB.QueryRow(query, args...)
-// 	return CardScan(row)
-// }
+// Select like from db
+func LikeExists(store *Store, user_id int, card_id int) (*mestoTypes.Like, error) {
+    query := `SELECT * FROM likes WHERE user_id=$1 AND card_id=$2`
+    r := store.DB.QueryRow(query, user_id, card_id)
+    return LikeScan(r)
+}
+
+// Set like to a card
+func LikeSetByCardID(store *Store, user_id int, card_id int) (*mestoTypes.Like, error){
+    query := `INSERT INTO likes (user_id, card_id) VALUES ($1, $2) RETURNING * `
+    // query := `INSERT INTO likes (user_id, card_id) VALUES ($1, $2) RETURNING id, user_id, card_id`
+    r := store.DB.QueryRow(query, user_id, card_id)
+    return LikeScan(r)
+}
+
+// Delete like from a card
+func LikeDeleteByCardID(store *Store, user_id int, card_id int) (*mestoTypes.Like, error) {
+    query := `DELETE FROM likes WHERE user_id=$1 AND card_id=$2 RETURNING *`
+    r := store.DB.QueryRow(query, user_id, card_id)
+    return LikeScan(r)
+}
+
 
 // Scan one like from a row
 func LikeScan(row_s interface{ Scan(args ...any) error }) (*mestoTypes.Like, error) {

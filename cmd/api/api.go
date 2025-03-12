@@ -3,6 +3,7 @@ package api
 import (
 	"mesto-goback/internal/db"
 	"mesto-goback/internal/server/card"
+	"mesto-goback/internal/server/like"
 	"mesto-goback/internal/server/user"
 
 	"github.com/gin-gonic/gin"
@@ -30,12 +31,20 @@ func (a API) Serve() {
 		usersMeRoute.PATCH("/avatar", userHandler.PatchMeAvatar)
 
 	}
+
 	cardsRoute := router.Group("/cards")
 	{
 		cardsHandler := card.NewHTTPHandler(a.store)
 		cardsRoute.GET("/", cardsHandler.GetCards)
 		cardsRoute.POST("/", cardsHandler.PostCard)
-		cardsRoute.DELETE("/:id", cardsHandler.DeleteCard)
+		cardsRoute.DELETE("/:card_id", cardsHandler.DeleteCard)
+
+		likesRoute := cardsRoute.Group("/likes")
+		{
+			likeHandler := like.NewHTTPHandler(a.store)
+			likesRoute.PUT("/:card_id", likeHandler.PutLike)
+			likesRoute.DELETE("/:card_id", likeHandler.DeleteLike)
+		}
 	}
 
 	router.Run(a.address + ":" + a.port)

@@ -5,6 +5,7 @@ ifneq (,$(wildcard ./.env))
 endif
 
 APP_NAME = mesto
+.PHONY: run, prod, build
 
 all: run
 
@@ -41,4 +42,5 @@ migrate-down:
 migrate:
 	~/go/bin/migrate -source file://cmd/migrate/migrations -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@localhost:5432/postgres?sslmode=disable" $(filter-out $@,$(MAKECMDGOALS))
 
+restart: shutdown up-db migrate-down migrate-up run
 

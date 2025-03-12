@@ -7,7 +7,6 @@ import (
 	"mesto-goback/internal/server/auth"
 	mestoTypes "mesto-goback/internal/types"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -92,15 +91,14 @@ func (h HTTPHandler) PostCard(c *gin.Context) {
 func (h HTTPHandler) DeleteCard(c *gin.Context) {
 	u, err := auth.Authorized(h.Store, c) // Get user
 	if err == nil {
-		card_id_string := c.Param("id")
-		card_id, err := strconv.Atoi(card_id_string)
-		if err != nil {
-			// Check if card type is int
+
+		card_id := mestoTypes.CardID{}
+		if err := c.ShouldBindUri(&card_id); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		card, err := db.CardGetByID(h.Store, card_id)
+		card, err := db.CardGetByID(h.Store, card_id.CardID)
 		if err != nil {
 			// Check if card is in db
 			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
@@ -113,7 +111,7 @@ func (h HTTPHandler) DeleteCard(c *gin.Context) {
 			return
 		}
 
-		err = db.CardDeleteByID(h.Store, card_id)
+		err = db.CardDeleteByID(h.Store, card_id.CardID)
 		if err != nil {
 			// Can't delete
 			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})

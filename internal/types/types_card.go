@@ -14,3 +14,8 @@ type CardPost struct {
 	Name string `json:"name" binding:"required"`
 	Link string `json:"link" binding:"required"`
 }
+
+
+type CardID struct {
+	CardID int `uri:"card_id" binding:"required"`
+}
