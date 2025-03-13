@@ -13,10 +13,11 @@ import (
 
 func main() {
 	// Init DB connectdion
+	DB_HOST := common.GetEnv("POSTGRES_HOST")
 	DB_USER := common.GetEnv("POSTGRES_USER")
 	DB_PSWD := common.GetEnv("POSTGRES_PASSWORD")
 
-	store, err := db.NewConnection(DB_USER, DB_PSWD)
+	store, err := db.NewConnection(DB_HOST, DB_USER, DB_PSWD)
 	if err != nil {
 		log.Fatalf("Can't connect to DB: %v\n", err)
 	}

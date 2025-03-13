@@ -12,8 +12,8 @@ type Store struct {
     DB *sql.DB
 }
 
-func NewConnection(user string, password string) (*Store, error){
-    connStr := fmt.Sprintf("user=%s dbname=postgres password=%s sslmode=disable", user, password)
+func NewConnection(host string, user string, password string) (*Store, error){
+    connStr := fmt.Sprintf("host=%s user=%s dbname=postgres password=%s sslmode=disable", host, user, password)
 	db, err := sql.Open("postgres", connStr)
     if err != nil {
         return nil, err
