@@ -1,10 +1,9 @@
 package card
 
 import (
-	"log"
 	"mesto-goback/internal/common"
 	"mesto-goback/internal/db"
-	"mesto-goback/internal/server/auth"
+	"mesto-goback/internal/service/auth"
 	mestoTypes "mesto-goback/internal/types"
 	"net/http"
 
@@ -29,17 +28,8 @@ func (h HTTPHandler) GetCards(c *gin.Context) {
 
 		// Get likes for every card
 		for _, card := range cards {
-			var users_liked []mestoTypes.User
-			likes := db.LikesGetByCardID(h.Store, card.ID)
-			// Get user for every like
-			for _, like := range likes {
-				user, err := db.UserGetByID(h.Store, like.User_ID)
-				if err != nil {
-					log.Printf("Card's user not found: %v\n", err.Error())
-				}
-				users_liked = append(users_liked, *user)
-			}
-			output = append(output, CardOutput{card, users_liked})
+			card_out := NewCardOutput(h, card)
+			output = append(output, card_out)
 		}
 
 		c.JSON(http.StatusOK, output)
@@ -83,7 +73,9 @@ func (h HTTPHandler) PostCard(c *gin.Context) {
 			c.JSON(http.StatusConflict, errMsg)
 			return
 		}
-		c.JSON(http.StatusCreated, card2)
+
+		card_out := NewCardOutput(h, *card2)
+		c.JSON(http.StatusCreated, card_out)
 	}
 }
 

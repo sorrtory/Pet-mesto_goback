@@ -2,12 +2,15 @@ package main
 
 import (
 	"log"
-	"mesto-goback/cmd/api"
+	"mesto-goback/cmd/server"
 	"mesto-goback/internal/common"
 	"mesto-goback/internal/db"
 )
 
 func main() {
+    // Disable DB reset on container restart
+    common.SetEnv("ALLOW_MIGRATION", "no")
+
 	// Init DB connectdion
 	DB_HOST := common.GetEnv("POSTGRES_HOST")
 	DB_USER := common.GetEnv("POSTGRES_USER")
@@ -20,7 +23,10 @@ func main() {
 	log.Println("Connected to DB")
 
 	// Serve API
-	a := api.NewAPI("0.0.0.0", "8080", store)
+	BE_HOST := common.GetEnv("BACKEND_HOST")
+	BE_PORT := common.GetEnv("BACKEND_PORT")
+
+	a := server.NewServer(BE_HOST, BE_PORT, store)
 	a.Serve()
 
 }

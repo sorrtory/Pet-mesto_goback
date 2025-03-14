@@ -12,3 +12,8 @@ func GetEnv(env string) string {
 	}
 	return v
 }
+
+
+func SetEnv(env string, value string)  {
+    os.Setenv(env, value)
+}

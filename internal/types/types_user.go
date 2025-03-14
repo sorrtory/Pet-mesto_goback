@@ -1,7 +1,7 @@
 package mestoTypes
 
 type User struct {
-	ID     int    `json:"_id"`
+	ID     int    `json:"id"`
 	Name   string `json:"name"`
 	About  string `json:"about"`
 	Avatar string `json:"avatar"`

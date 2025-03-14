@@ -5,7 +5,7 @@ import "time"
 type Card struct {
 	ID        int       `json:"id"`
 	Owner_id  int       `json:"owner_id"`
-	Name      string    `json:"string"`
+	Name      string    `json:"name"`
 	Link      string    `json:"link"`
 	CreatedAt time.Time `json:"createdAt"`
 }

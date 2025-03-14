@@ -7,22 +7,28 @@ endif
 APP_NAME = mesto
 .PHONY: run, prod, build
 
+
 all: run
 
+# Recompile
 build:
 	go build -o bin/$(APP_NAME) cmd/main.go
 
+# Run on localhost with already started DB
 run: build
-	./bin/$(APP_NAME)
-
-prod:
-	docker compose --file deployment/compose.yaml --project-name 'mesto-goback' up -d --build
+	BACKEND_PUBLIC=web/public POSTGRES_HOST=localhost BACKEND_HOST=localhost BACKEND_PORT=8080 ./bin/$(APP_NAME)
 
 shutdown:
-	docker compose --file deployment/compose.yaml down
+	docker compose down
 
 up-db:
-	docker compose --file deployment/compose.yaml up -d --build 'db'
+	docker compose up -d --build 'db'
+
+down-db:
+	docker compose down 'db'
+
+# Clear DB and up it
+restart-db: shutdown up-db migrate-down migrate-up
 
 # Install migrate tool (~/go/bin/migrate by default)
 migrate-install:
@@ -33,14 +39,16 @@ migrate-create:
 
 # cmd/migrate/migrate.go does the same as "migrate up/down"
 migrate-up:
-	go run cmd/migrate/migrate.go up
+	MIGRATIONS_PATH=file://cmd/migrate/migrations go run cmd/migrate/migrate.go up
 
 migrate-down:
-	go run cmd/migrate/migrate.go down
+	MIGRATIONS_PATH=file://cmd/migrate/migrations go run cmd/migrate/migrate.go down
 
 # Use any migratinon command with "make migrate <cmds...>"
 migrate:
-	~/go/bin/migrate -source file://cmd/migrate/migrations -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@localhost:5432/postgres?sslmode=disable" $(filter-out $@,$(MAKECMDGOALS))
+	~/go/bin/migrate -source file://cmd/migrate/migrations -database "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):5432/postgres?sslmode=disable" $(filter-out $@,$(MAKECMDGOALS))
 
-restart: shutdown up-db migrate-down migrate-up run
 
+# Start containers
+prod:
+	docker compose up -d --build

@@ -2,7 +2,7 @@ package like
 
 import (
 	"mesto-goback/internal/db"
-	"mesto-goback/internal/server/auth"
+	"mesto-goback/internal/service/auth"
 	mestoTypes "mesto-goback/internal/types"
 	"net/http"
 
