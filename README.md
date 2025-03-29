@@ -2,19 +2,25 @@
 
 Mesto API implemented with Golang
 
+DIY project originally presented by Yandex.Practicum WebDev course.
+
+Rewritten using Golang Gin and Postgres, featuring CRUD, migrations and deployment with docker.
+
 ## Check on the result
 
 > [mesto.sorrtory.ru](https://mesto.sorrtory.ru)
 
 ## Deploy
 >
-> Tested on Go 1.24.1 and Ubuntu 24.04
->
-> With `docker compose`
+> `Ubuntu 24.04`
+> `Go 1.24.1`
+> `Docker 28.0.4 (with docker-compose-plugin)`
 
-1. Create .env
+0. Install [Go](https://go.dev/doc/install) and [docker](https://docs.docker.com/engine/install/ubuntu/)
 
-    - To start in docker
+1. Create `.env` file
+
+    - **To start in docker**
 
         ```bash
         POSTGRES_HOST=db
@@ -29,7 +35,7 @@ Mesto API implemented with Golang
         MIGRATIONS_PATH=file://migrations
         ```
 
-    - To start in system
+    - **To start in system**
 
         ```bash
         POSTGRES_HOST=localhost
@@ -45,19 +51,33 @@ Mesto API implemented with Golang
         ```
 
 2. Start
-    - In docker\
-      `make prod`
+    - **To launch in docker**
 
-    - In system\
-      `make up-db` and `make migrate-up` and `make`
+      ```bash
+      make prod
+      ```
+
+    - **To launch in system**\
+      Firstly. Set up the database
+
+      ```bash
+      make up-db && make migrate-up
+      ```
+
+      Secondly. Build and launch the server
+
+      ```bash
+      make
+      ```
+
 3. Test with
-    - Postman
-
-      *OR*
-    - [Visit](http://localhost:8080/static)
+    - Running the postman [collection](api)
+    - [Visiting](http://localhost:8080/static) the local page
 
       ```bash
       http://${BACKEND_HOST}:${BACKEND_PORT}/static
+      # If launched in system
+      http://localhost:8080/static
       ```
 
 ## Conclusion
