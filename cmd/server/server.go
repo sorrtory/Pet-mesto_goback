@@ -20,9 +20,26 @@ func NewServer(address string, port string, store *db.Store) *Server {
 	return &Server{address, port, store}
 }
 
+// Set CORS headers for all responses
+func CORSMiddleware() gin.HandlerFunc {
+    return func(c *gin.Context) {
+        c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+        c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+        c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+        c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+        if c.Request.Method == "OPTIONS" {
+            c.AbortWithStatus(204)
+            return
+        }
+
+        c.Next()
+    }
+}
+
 // Start handlers
 func (a Server) Serve() {
 	router := gin.Default()
+    router.Use(CORSMiddleware())
 
 	// Serve frontend
 	front := web.NewHTTPHandler()
