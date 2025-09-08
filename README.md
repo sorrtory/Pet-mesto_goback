@@ -2,13 +2,9 @@
 
 Mesto API implemented with Golang
 
-DIY project originally presented by Yandex.Practicum WebDev course.
+This project originally presented on nest.js + mongo by Yandex.Practicum WebDev course, but this version uses Golang Gin and Postgres, featuring CRUD, migrations and deployment with docker.
 
-Rewritten using Golang Gin and Postgres, featuring CRUD, migrations and deployment with docker.
-
-## Check on the result
-
-> [mesto.sorrtory.ru](https://mesto.sorrtory.ru)
+## Check on the result [here](https://mesto.sorrtory.ru) \[DISABLED]
 
 ## Deploy
 >
@@ -86,7 +82,7 @@ Anyway there's a container with Postgres and backend which is connected to it.
 
 Frontend fetches to the backend and so a client could use the api to interact with db.
 
-*SCREENSHOTS FROM FRONT...*
+Here should be *SCREENSHOTS FROM [FRONTEND](https://github.com/sorrtory/Practicum__Mesto)...* but I dropped it
 
 ## Sources
 
